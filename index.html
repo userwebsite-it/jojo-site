@@ -1,73 +1,532 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JoJo Stand Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-1: #fffef9;
+      --bg-2: #f8f3e6;
+      --card: rgba(255, 255, 255, 0.9);
+      --gold: #caa74a;
+      --gold-dark: #9d7a22;
+      --text: #1e1e1e;
+      --muted: #666;
+      --accent: #6f56d9;
+      --accent-soft: rgba(111, 86, 217, 0.18);
+      --border: #e7d8ac;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background: #fffdf5;
-      font-family: Arial;
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    }
+
+    .page {
+      width: min(100%, 960px);
+      margin: 0 auto;
+      padding: 28px 16px 44px;
+    }
+
+    .header {
       text-align: center;
+      margin-bottom: 24px;
     }
 
-    .card {
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 10px;
+    }
+
+    h1, h2, h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: 0.03em;
+    }
+
+    .viewer {
+      width: min(100%, 720px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-wrap {
+      position: relative;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.96);
+      color: var(--gold-dark);
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      z-index: 3;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .arrow:hover {
+      transform: translateY(-50%) scale(1.04);
+    }
+
+    .arrow.left {
+      left: -18px;
+    }
+
+    .arrow.right {
+      right: -18px;
+    }
+
+    .hero-card,
+    .info-card,
+    .user-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-card {
+      overflow: hidden;
+      min-height: 430px;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 28%, var(--accent-soft), transparent 22%),
+        linear-gradient(180deg, rgba(255,255,255,0.95), rgba(247,240,223,0.82));
+    }
+
+    .hero-inner {
+      position: relative;
+      min-height: 430px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 26px;
+    }
+
+    .hero-backdrop {
+      position: absolute;
+      inset: 0;
+      opacity: 0.07;
+      background-size: cover;
+      background-position: center;
+      filter: saturate(0.8);
+    }
+
+    .figures {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .figure {
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 18px 35px rgba(0,0,0,0.12);
+      overflow: hidden;
+      background: rgba(255,255,255,0.36);
+      backdrop-filter: blur(8px);
+    }
+
+    .figure.stand {
+      width: 58%;
+    }
+
+    .figure.user {
+      width: 40%;
+      margin-bottom: 12px;
+    }
+
+    .figure img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: 3 / 4;
+    }
+
+    .label {
+      padding: 10px 12px 12px;
+      text-align: center;
+      font-family: "Playfair Display", Georgia, serif;
+      letter-spacing: 0.12em;
+      color: #2a2a2a;
+      background: rgba(255,255,255,0.65);
+    }
+
+    .info-card,
+    .user-card {
+      padding: 22px;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 8px;
+    }
+
+    .stand-name {
+      color: var(--accent);
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      letter-spacing: 0.12em;
+    }
+
+    .favorite-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
       background: white;
-      margin: 20px auto;
-      padding: 20px;
-      width: 300px;
-      border: 2px solid gold;
-      border-radius: 15px;
+      font-size: 24px;
+      color: var(--gold-dark);
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+      transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
     }
 
-    button {
-      padding: 10px;
-      font-size: 20px;
-      margin: 10px;
+    .favorite-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .favorite-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: transparent;
+    }
+
+    .divider {
+      height: 1px;
+      margin: 18px 0;
+      background: linear-gradient(90deg, var(--accent), var(--gold), transparent);
+    }
+
+    .gold-divider {
+      height: 1px;
+      margin: 18px 0;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .field-title {
+      font-size: 12px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.75;
+      color: #333;
+    }
+
+    .info-group + .info-group {
+      margin-top: 20px;
+    }
+
+    .counter {
+      align-self: center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      color: #5d5d5d;
+      border-radius: 999px;
+      padding: 10px 16px;
+      letter-spacing: 0.32em;
+      font-size: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 780px) {
+      .arrow.left { left: -4px; }
+      .arrow.right { right: -4px; }
+      .hero-card,
+      .info-card,
+      .user-card {
+        border-radius: 22px;
+      }
+      .hero-inner {
+        min-height: 370px;
+        padding: 18px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        padding: 20px 10px 32px;
+      }
+
+      .arrow {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+      }
+
+      .arrow.left {
+        left: 8px;
+        transform: translateY(-50%);
+      }
+
+      .arrow.right {
+        right: 8px;
+        transform: translateY(-50%);
+      }
+
+      .hero-inner {
+        min-height: 340px;
+        padding: 14px;
+      }
+
+      .figures {
+        max-width: 100%;
+        gap: 10px;
+      }
+
+      .figure.stand {
+        width: 56%;
+      }
+
+      .figure.user {
+        width: 42%;
+        margin-bottom: 8px;
+      }
+
+      .info-card,
+      .user-card {
+        padding: 18px;
+      }
     }
   </style>
 </head>
-
 <body>
+  <div class="page">
+    <header class="header">
+      <div class="eyebrow">Stand Archive</div>
+      <h1>JoJo Stand Viewer</h1>
+    </header>
 
-<h1>JoJo Stand Viewer</h1>
+    <main class="viewer">
+      <section class="hero-wrap">
+        <button class="arrow left" id="prevBtn" aria-label="Previous Stand">‹</button>
 
-<button onclick="prev()">⬅</button>
-<button onclick="next()">➡</button>
+        <div class="hero-card">
+          <div class="hero-inner">
+            <div class="hero-backdrop" id="heroBackdrop"></div>
 
-<div class="card">
-  <h2 id="stand">Star Platinum</h2>
-  <p id="ability">Super strength and time stop</p>
-</div>
+            <div class="figures">
+              <div class="figure stand">
+                <img id="standImage" src="" alt="Stand image">
+                <div class="label">Stand</div>
+              </div>
 
-<div class="card">
-  <h3 id="user">Jotaro Kujo</h3>
-  <p>Part 3</p>
-</div>
+              <div class="figure user">
+                <img id="userImage" src="" alt="User image">
+                <div class="label">User</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-<script>
-  let stands = [
-    {name:"Star Platinum", ability:"Time stop", user:"Jotaro"},
-    {name:"The World", ability:"Time stop", user:"DIO"},
-    {name:"Crazy Diamond", ability:"Healing", user:"Josuke"}
-  ];
+        <button class="arrow right" id="nextBtn" aria-label="Next Stand">›</button>
+      </section>
 
-  let index = 0;
+      <section class="info-card">
+        <div class="top-row">
+          <div>
+            <div class="section-label">Stand</div>
+            <h2 class="stand-name" id="standName">STAR PLATINUM</h2>
+          </div>
+          <button class="favorite-btn" id="favoriteBtn" aria-label="Favorite this stand" title="Favorite this stand">♥</button>
+        </div>
 
-  function update() {
-    document.getElementById("stand").innerText = stands[index].name;
-    document.getElementById("ability").innerText = stands[index].ability;
-    document.getElementById("user").innerText = stands[index].user;
-  }
+        <div class="divider"></div>
 
-  function next() {
-    index = (index + 1) % stands.length;
-    update();
-  }
+        <div class="info-group">
+          <div class="field-title">Ability</div>
+          <p id="standAbility"></p>
+        </div>
 
-  function prev() {
-    index = (index - 1 + stands.length) % stands.length;
-    update();
-  }
-</script>
+        <div class="info-group">
+          <div class="field-title">Description</div>
+          <p id="standDescription"></p>
+        </div>
+      </section>
 
+      <section class="user-card">
+        <div class="section-label">User</div>
+        <h3 id="userName"></h3>
+        <div class="gold-divider"></div>
+
+        <div class="info-group">
+          <div class="field-title">Series</div>
+          <p id="standPart"></p>
+        </div>
+
+        <div class="info-group">
+          <div class="field-title">Bio</div>
+          <p id="userBio"></p>
+        </div>
+      </section>
+
+      <div class="counter" id="counter">01 / 03</div>
+    </main>
+  </div>
+
+  <script>
+    const stands = [
+      {
+        id: "star-platinum",
+        name: "STAR PLATINUM",
+        user: "Jotaro Kujo",
+        part: "Part 3 · Stardust Crusaders",
+        accent: "#6f56d9",
+        ability: "Super speed, precision, immense strength, and time stop.",
+        description: "A close-range Stand with overwhelming power and accuracy. Its speed and control make it one of the most dangerous Stands in the series.",
+        userBio: "A stoic and intimidating student whose calm attitude hides fierce loyalty, intelligence, and determination.",
+        standImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
+        userImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80",
+        backdrop: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=80"
+      },
+      {
+        id: "the-world",
+        name: "THE WORLD",
+        user: "DIO",
+        part: "Part 3 · Stardust Crusaders",
+        accent: "#d2a316",
+        ability: "Immense close-range power and the ability to stop time.",
+        description: "A terrifying Stand known for brute force, confidence, and one of the most iconic time-based abilities in JoJo.",
+        userBio: "A ruthless and charismatic villain obsessed with power, control, and defeating the Joestar bloodline.",
+        standImage: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80",
+        userImage: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80",
+        backdrop: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1400&q=80"
+      },
+      {
+        id: "crazy-diamond",
+        name: "CRAZY DIAMOND",
+        user: "Josuke Higashikata",
+        part: "Part 4 · Diamond Is Unbreakable",
+        accent: "#ff4f9a",
+        ability: "Can restore broken objects and heal injuries by returning things to a previous state.",
+        description: "A fast and powerful Stand with one of the most useful support abilities in the series, blending offense with restoration.",
+        userBio: "A kind-hearted but fiercely proud student known for his loyalty, courage, and explosive temper when insulted.",
+        standImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+        userImage: "https://images.unsplash.com/photo-1500048993953-d23a436266cf?auto=format&fit=crop&w=900&q=80",
+        backdrop: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1400&q=80"
+      }
+    ];
+
+    let currentIndex = 0;
+    const favoriteSet = new Set();
+
+    const standName = document.getElementById('standName');
+    const standAbility = document.getElementById('standAbility');
+    const standDescription = document.getElementById('standDescription');
+    const userName = document.getElementById('userName');
+    const standPart = document.getElementById('standPart');
+    const userBio = document.getElementById('userBio');
+    const standImage = document.getElementById('standImage');
+    const userImage = document.getElementById('userImage');
+    const heroBackdrop = document.getElementById('heroBackdrop');
+    const counter = document.getElementById('counter');
+    const favoriteBtn = document.getElementById('favoriteBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function updateViewer() {
+      const stand = stands[currentIndex];
+      document.documentElement.style.setProperty('--accent', stand.accent);
+      document.documentElement.style.setProperty('--accent-soft', hexToRgba(stand.accent, 0.18));
+
+      standName.textContent = stand.name;
+      standAbility.textContent = stand.ability;
+      standDescription.textContent = stand.description;
+      userName.textContent = stand.user;
+      standPart.textContent = stand.part;
+      userBio.textContent = stand.userBio;
+      standImage.src = stand.standImage;
+      userImage.src = stand.userImage;
+      heroBackdrop.style.backgroundImage = `url('${stand.backdrop}')`;
+      counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(stands.length).padStart(2, '0')}`;
+      favoriteBtn.classList.toggle('active', favoriteSet.has(stand.id));
+    }
+
+    function nextStand() {
+      currentIndex = (currentIndex + 1) % stands.length;
+      updateViewer();
+    }
+
+    function prevStand() {
+      currentIndex = (currentIndex - 1 + stands.length) % stands.length;
+      updateViewer();
+    }
+
+    function toggleFavorite() {
+      const stand = stands[currentIndex];
+      if (favoriteSet.has(stand.id)) {
+        favoriteSet.delete(stand.id);
+      } else {
+        favoriteSet.add(stand.id);
+      }
+      updateViewer();
+    }
+
+    function hexToRgba(hex, alpha) {
+      const clean = hex.replace('#', '');
+      const bigint = parseInt(clean, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    prevBtn.addEventListener('click', prevStand);
+    nextBtn.addEventListener('click', nextStand);
+    favoriteBtn.addEventListener('click', toggleFavorite);
+
+    updateViewer();
+  </script>
 </body>
 </html>
