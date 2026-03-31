@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JoJo Stand Viewer</title>
+  <style>
+    body {
+      background: #fffdf5;
+      font-family: Arial;
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      width: 300px;
+      border: 2px solid gold;
+      border-radius: 15px;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 20px;
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>JoJo Stand Viewer</h1>
+
+<button onclick="prev()">⬅</button>
+<button onclick="next()">➡</button>
+
+<div class="card">
+  <h2 id="stand">Star Platinum</h2>
+  <p id="ability">Super strength and time stop</p>
+</div>
+
+<div class="card">
+  <h3 id="user">Jotaro Kujo</h3>
+  <p>Part 3</p>
+</div>
+
+<script>
+  let stands = [
+    {name:"Star Platinum", ability:"Time stop", user:"Jotaro"},
+    {name:"The World", ability:"Time stop", user:"DIO"},
+    {name:"Crazy Diamond", ability:"Healing", user:"Josuke"}
+  ];
+
+  let index = 0;
+
+  function update() {
+    document.getElementById("stand").innerText = stands[index].name;
+    document.getElementById("ability").innerText = stands[index].ability;
+    document.getElementById("user").innerText = stands[index].user;
+  }
+
+  function next() {
+    index = (index + 1) % stands.length;
+    update();
+  }
+
+  function prev() {
+    index = (index - 1 + stands.length) % stands.length;
+    update();
+  }
+</script>
+
+</body>
+</html>
