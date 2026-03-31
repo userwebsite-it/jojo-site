@@ -1,207 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>JoJo Stand Viewer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JoJo Stand Viewer</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Cormorant+Garamond:wght@500&family=Inter&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Cormorant+Garamond:wght@500&family=Inter&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --accent: #9a78ea;
-      --bg: #f5e9d6;
-    }
+<style>
+:root {
+  --accent: #9a78ea;
+  --bg: #f5e9d6;
+}
 
-    body {
-      margin: 0;
-      font-family: "Inter", sans-serif;
-      background: var(--bg);
-      text-align: center;
-    }
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  text-align: center;
+}
 
-    h1 {
-      font-family: "Playfair Display", serif;
-      margin-top: 20px;
-    }
+h1 {
+  font-family: "Playfair Display", serif;
+  margin-top: 20px;
+}
 
-    .hero {
-      position: relative;
-      height: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.hero {
+  position: relative;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .hero img {
-      max-height: 400px;
-      max-width: 90%;
-    }
+.hero img {
+  max-height: 420px;
+  max-width: 90%;
+}
 
-    .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 80px;
-      cursor: pointer;
-      color: rgba(0,0,0,0.3);
-      user-select: none;
-    }
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 80px;
+  cursor: pointer;
+  color: rgba(0,0,0,0.3);
+  user-select: none;
+}
 
-    .left { left: 20px; }
-    .right { right: 20px; }
+.left { left: 20px; }
+.right { right: 20px; }
 
-    .stand-name {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 36px;
-      color: var(--accent);
-      margin-top: 10px;
-    }
+.stand-name {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 40px;
+  color: var(--accent);
+  margin-top: 10px;
+}
 
-    .user-name {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 28px;
-      color: var(--accent);
-      margin-top: 5px;
-    }
+.user-name {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 30px;
+  color: var(--accent);
+  margin-top: 5px;
+}
 
-    .favorite {
-      margin-top: 10px;
-      font-size: 24px;
-      cursor: pointer;
-    }
+.favorite {
+  margin-top: 10px;
+  font-size: 26px;
+  cursor: pointer;
+}
 
-    .details {
-      margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
+.counter {
+  margin-top: 10px;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      width: 300px;
-    }
+.details {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
-    .counter {
-      margin-top: 10px;
-      font-size: 12px;
-      letter-spacing: 3px;
-    }
-  </style>
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 300px;
+}
+</style>
 </head>
 
 <body>
 
-  <h1>JoJo Stand Viewer</h1>
+<h1>JoJo Stand Viewer</h1>
 
-  <div class="hero">
-    <div class="arrow left" onclick="prev()">‹</div>
+<div class="hero">
+  <div class="arrow left" onclick="prev()">‹</div>
+  <img id="image">
+  <div class="arrow right" onclick="next()">›</div>
+</div>
 
-    <img id="image" src="" />
+<div class="stand-name" id="standName"></div>
+<div class="user-name" id="userName"></div>
 
-    <div class="arrow right" onclick="next()">›</div>
+<div class="favorite" onclick="favorite()">♥</div>
+<div class="counter" id="counter"></div>
+
+<div class="details">
+  <div class="card">
+    <h3>Stand</h3>
+    <p id="ability"></p>
+    <p id="description"></p>
   </div>
 
-  <div class="stand-name" id="standName"></div>
-  <div class="user-name" id="userName"></div>
-
-  <div class="favorite" onclick="favorite()">♥</div>
-
-  <div class="counter" id="counter"></div>
-
-  <div class="details">
-    <div class="card">
-      <h3>Stand</h3>
-      <p id="ability"></p>
-      <p id="description"></p>
-    </div>
-
-    <div class="card">
-      <h3>User</h3>
-      <p id="bio"></p>
-      <p id="part"></p>
-    </div>
+  <div class="card">
+    <h3>User</h3>
+    <p id="bio"></p>
+    <p id="part"></p>
   </div>
+</div>
 
-  <script>
-    const stands = [
-      {
-        name: "Star Platinum",
-        user: "Jotaro Kujo",
-        accent: "#9a78ea",
-        ability: "Super speed, precision, immense strength, and time stop.",
-        description: "A close-range Stand with overwhelming power.",
-        bio: "A stoic and intimidating student.",
-        part: "Part 3",
-        image: "star-platinum.png"
-      },
-      {
-        name: "The World",
-        user: "DIO",
-        accent: "#d2a316",
-        ability: "Time stop and immense strength.",
-        description: "A terrifying Stand.",
-        bio: "A ruthless villain.",
-        part: "Part 3",
-        image: "the-world.png"
-      },
-      {
-        name: "Crazy Diamond",
-        user: "Josuke Higashikata",
-        accent: "#ff5ba2",
-        ability: "Restores objects and heals.",
-        description: "A powerful restoration Stand.",
-        bio: "Kind but fierce.",
-        part: "Part 4",
-        image: "crazy-diamond.png"
-      }
-    ];
+<script>
+const stands = [
+  {
+    name: "Star Platinum",
+    user: "Jotaro Kujo",
+    accent: "#9a78ea",
+    ability: "Super speed, precision, immense strength, and time stop.",
+    description: "A close-range Stand with overwhelming power.",
+    bio: "A stoic and intimidating student.",
+    part: "Part 3",
+    image: "star-platinum.png"
+  },
+  {
+    name: "The World",
+    user: "DIO",
+    accent: "#d2a316",
+    ability: "Time stop and immense strength.",
+    description: "A terrifying Stand.",
+    bio: "A ruthless villain.",
+    part: "Part 3",
+    image: "the-world-new.png"  // ✅ FIXED HERE
+  },
+  {
+    name: "Crazy Diamond",
+    user: "Josuke Higashikata",
+    accent: "#ff5ba2",
+    ability: "Restores objects and heals.",
+    description: "A powerful restoration Stand.",
+    bio: "Kind but fierce.",
+    part: "Part 4",
+    image: "crazy-diamond.png"
+  }
+];
 
-    let i = 0;
-    let favorites = new Set();
+let i = 0;
 
-    function update() {
-      let s = stands[i];
+function update() {
+  let s = stands[i];
 
-      document.documentElement.style.setProperty("--accent", s.accent);
+  document.documentElement.style.setProperty("--accent", s.accent);
 
-      document.getElementById("image").src = s.image;
-      document.getElementById("standName").textContent = s.name;
-      document.getElementById("userName").textContent = s.user;
-      document.getElementById("ability").textContent = s.ability;
-      document.getElementById("description").textContent = s.description;
-      document.getElementById("bio").textContent = s.bio;
-      document.getElementById("part").textContent = s.part;
+  document.getElementById("image").src = s.image;
+  document.getElementById("standName").textContent = s.name;
+  document.getElementById("userName").textContent = s.user;
+  document.getElementById("ability").textContent = s.ability;
+  document.getElementById("description").textContent = s.description;
+  document.getElementById("bio").textContent = s.bio;
+  document.getElementById("part").textContent = s.part;
 
-      document.getElementById("counter").textContent =
-        (i + 1).toString().padStart(2, "0") + " / " + stands.length.toString().padStart(2, "0");
-    }
+  document.getElementById("counter").textContent =
+    (i + 1).toString().padStart(2, "0") + " / " + stands.length.toString().padStart(2, "0");
+}
 
-    function next() {
-      i = (i + 1) % stands.length;
-      update();
-    }
+function next() {
+  i = (i + 1) % stands.length;
+  update();
+}
 
-    function prev() {
-      i = (i - 1 + stands.length) % stands.length;
-      update();
-    }
+function prev() {
+  i = (i - 1 + stands.length) % stands.length;
+  update();
+}
 
-    function favorite() {
-      let id = stands[i].name;
-      if (favorites.has(id)) {
-        favorites.delete(id);
-      } else {
-        favorites.add(id);
-      }
-    }
+function favorite() {
+  alert("Favorited!");
+}
 
-    update();
-  </script>
+update();
+</script>
 
 </body>
 </html>
