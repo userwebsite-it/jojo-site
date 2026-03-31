@@ -2,437 +2,206 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>JoJo Stand Viewer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Cormorant+Garamond:wght@500&family=Inter&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg-1: #f7ecd8;
-      --bg-2: #f3e4c8;
-      --gold: #c6a14a;
-      --gold-dark: #8d6a1f;
-      --text: #231f1a;
-      --muted: #685f54;
-      --accent: #8d6ce0;
-      --accent-soft: rgba(141, 108, 224, 0.16);
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
-      --card: rgba(255,255,255,0.84);
-      --border: rgba(198, 161, 74, 0.28);
+      --accent: #9a78ea;
+      --bg: #f5e9d6;
     }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      font-family: "Inter", Arial, sans-serif;
-      background: radial-gradient(circle at top, #fbf4e7 0%, var(--bg-1) 45%, var(--bg-2) 100%);
-    }
-
-    .page {
-      width: min(100%, 1100px);
-      margin: 0 auto;
-      padding: 22px 18px 60px;
-    }
-
-    .header {
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
       text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .eyebrow {
-      font-size: 12px;
-      letter-spacing: 0.38em;
-      text-transform: uppercase;
-      color: var(--gold-dark);
-      margin-bottom: 10px;
-    }
-
-    h1, h2, h3 {
-      margin: 0;
-      font-weight: 700;
     }
 
     h1 {
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: clamp(2rem, 4.5vw, 3.2rem);
-      letter-spacing: 0.03em;
+      font-family: "Playfair Display", serif;
+      margin-top: 20px;
     }
 
-    .hero-section {
+    .hero {
       position: relative;
-      min-height: 690px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 22px;
-    }
-
-    .hero-stage {
-      position: relative;
-      width: 100%;
-      min-height: 460px;
+      height: 500px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .glow {
-      position: absolute;
-      width: 360px;
-      height: 360px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      filter: blur(42px);
-      opacity: 1;
-      z-index: 0;
-    }
-
-    .main-image {
-      position: relative;
-      z-index: 2;
-      max-width: min(92vw, 420px);
-      max-height: 480px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 16px 28px rgba(0,0,0,0.14));
-      user-select: none;
-      -webkit-user-drag: none;
+    .hero img {
+      max-height: 400px;
+      max-width: 90%;
     }
 
     .arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      border: none;
-      background: transparent;
-      color: rgba(116, 120, 132, 0.55);
-      font-size: clamp(6rem, 11vw, 11rem);
-      line-height: 1;
+      font-size: 80px;
       cursor: pointer;
-      z-index: 3;
-      transition: transform 0.15s ease, color 0.15s ease;
-      padding: 0;
-      font-family: Georgia, serif;
+      color: rgba(0,0,0,0.3);
+      user-select: none;
     }
 
-    .arrow:hover {
-      color: rgba(116, 120, 132, 0.8);
-      transform: translateY(-50%) scale(1.03);
-    }
-
-    .arrow.left { left: 8%; }
-    .arrow.right { right: 8%; }
-
-    .hero-text {
-      text-align: center;
-      margin-top: 14px;
-      max-width: 760px;
-    }
+    .left { left: 20px; }
+    .right { right: 20px; }
 
     .stand-name {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(2.1rem, 4vw, 3.5rem);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 36px;
       color: var(--accent);
-      letter-spacing: 0.06em;
+      margin-top: 10px;
     }
 
     .user-name {
-      margin-top: 16px;
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(1.8rem, 3.4vw, 3rem);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 28px;
       color: var(--accent);
-      letter-spacing: 0.05em;
+      margin-top: 5px;
     }
 
-    .favorite-wrap {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .favorite-btn {
-      width: 52px;
-      height: 52px;
-      border-radius: 999px;
-      border: 1px solid rgba(198, 161, 74, 0.45);
-      background: rgba(255,255,255,0.75);
-      backdrop-filter: blur(8px);
-      color: var(--gold-dark);
-      font-size: 25px;
+    .favorite {
+      margin-top: 10px;
+      font-size: 24px;
       cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
-    }
-
-    .favorite-btn:hover { transform: translateY(-2px); }
-
-    .favorite-btn.active {
-      background: var(--accent);
-      color: white;
-      border-color: transparent;
-    }
-
-    .counter {
-      margin-top: 18px;
-      font-size: 12px;
-      letter-spacing: 0.34em;
-      color: var(--muted);
     }
 
     .details {
-      width: min(100%, 860px);
-      margin: 38px auto 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 26px;
-      box-shadow: var(--shadow);
-      padding: 22px 22px 24px;
-      backdrop-filter: blur(10px);
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      width: 300px;
     }
 
-    .section-label {
+    .counter {
+      margin-top: 10px;
       font-size: 12px;
-      letter-spacing: 0.34em;
-      text-transform: uppercase;
-      color: var(--gold-dark);
-      margin-bottom: 10px;
-    }
-
-    .card-title {
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: 2rem;
-      letter-spacing: 0.03em;
-    }
-
-    .divider {
-      height: 1px;
-      margin: 16px 0 18px;
-      background: linear-gradient(90deg, var(--accent), var(--gold), transparent);
-    }
-
-    .divider.gold {
-      background: linear-gradient(90deg, var(--gold), transparent);
-    }
-
-    .field-title {
-      font-size: 12px;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .group + .group { margin-top: 18px; }
-
-    p {
-      margin: 0;
-      line-height: 1.8;
-      color: #332d27;
-    }
-
-    @media (max-width: 920px) {
-      .arrow.left { left: 2%; }
-      .arrow.right { right: 2%; }
-      .hero-section { min-height: 640px; }
-      .hero-stage { min-height: 420px; }
-      .details { width: min(100%, 760px); }
-    }
-
-    @media (max-width: 700px) {
-      .page { padding: 18px 12px 40px; }
-      .hero-section { min-height: 560px; }
-      .hero-stage { min-height: 340px; }
-      .main-image { max-width: min(88vw, 300px); max-height: 360px; }
-      .glow { width: 250px; height: 250px; }
-      .arrow { font-size: 4.8rem; }
-      .arrow.left { left: 8px; }
-      .arrow.right { right: 8px; }
-      .details { grid-template-columns: 1fr; margin-top: 28px; }
-      .card { border-radius: 22px; }
+      letter-spacing: 3px;
     }
   </style>
 </head>
+
 <body>
-  <div class="page">
-    <header class="header">
-      <div class="eyebrow">Stand Archive</div>
-      <h1>JoJo Stand Viewer</h1>
-    </header>
 
-    <section class="hero-section">
-      <div class="hero-stage">
-        <button class="arrow left" id="prevBtn" aria-label="Previous Stand">‹</button>
-        <div class="glow" id="glow"></div>
-        <img id="mainImage" class="main-image" src="" alt="Stand and user image" />
-        <button class="arrow right" id="nextBtn" aria-label="Next Stand">›</button>
-      </div>
+  <h1>JoJo Stand Viewer</h1>
 
-      <div class="hero-text">
-        <h2 class="stand-name" id="standName">Star Platinum</h2>
-        <div class="user-name" id="userName">Jotaro Kujo</div>
-      </div>
+  <div class="hero">
+    <div class="arrow left" onclick="prev()">‹</div>
 
-      <div class="favorite-wrap">
-        <button class="favorite-btn" id="favoriteBtn" aria-label="Favorite this stand" title="Favorite this stand">♥</button>
-      </div>
+    <img id="image" src="" />
 
-      <div class="counter" id="counter">01 / 03</div>
-    </section>
+    <div class="arrow right" onclick="next()">›</div>
+  </div>
 
-    <section class="details">
-      <article class="card">
-        <div class="section-label">Stand</div>
-        <h3 class="card-title" id="standCardTitle">Star Platinum</h3>
-        <div class="divider"></div>
+  <div class="stand-name" id="standName"></div>
+  <div class="user-name" id="userName"></div>
 
-        <div class="group">
-          <div class="field-title">Ability</div>
-          <p id="standAbility"></p>
-        </div>
+  <div class="favorite" onclick="favorite()">♥</div>
 
-        <div class="group">
-          <div class="field-title">Description</div>
-          <p id="standDescription"></p>
-        </div>
-      </article>
+  <div class="counter" id="counter"></div>
 
-      <article class="card">
-        <div class="section-label">User</div>
-        <h3 class="card-title" id="userCardTitle">Jotaro Kujo</h3>
-        <div class="divider gold"></div>
+  <div class="details">
+    <div class="card">
+      <h3>Stand</h3>
+      <p id="ability"></p>
+      <p id="description"></p>
+    </div>
 
-        <div class="group">
-          <div class="field-title">Series</div>
-          <p id="standPart"></p>
-        </div>
-
-        <div class="group">
-          <div class="field-title">Bio</div>
-          <p id="userBio"></p>
-        </div>
-      </article>
-    </section>
+    <div class="card">
+      <h3>User</h3>
+      <p id="bio"></p>
+      <p id="part"></p>
+    </div>
   </div>
 
   <script>
     const stands = [
       {
-        id: "star-platinum",
         name: "Star Platinum",
         user: "Jotaro Kujo",
-        part: "Part 3 · Stardust Crusaders",
         accent: "#9a78ea",
         ability: "Super speed, precision, immense strength, and time stop.",
-        description: "A close-range Stand with overwhelming power and accuracy. Its speed and control make it one of the most dangerous Stands in the series.",
-        userBio: "A stoic and intimidating student whose calm attitude hides fierce loyalty, intelligence, and determination.",
-        mainImage: "https://static.jojowiki.com/images/thumb/3/31/latest/20210424183317/ASB_Star_Platinum_%28Jotaro_Kujo%29.png/400px-ASB_Star_Platinum_%28Jotaro_Kujo%29.png"
+        description: "A close-range Stand with overwhelming power.",
+        bio: "A stoic and intimidating student.",
+        part: "Part 3",
+        image: "star-platinum.png"
       },
       {
-        id: "the-world",
         name: "The World",
         user: "DIO",
-        part: "Part 3 · Stardust Crusaders",
         accent: "#d2a316",
-        ability: "Immense close-range power and the ability to stop time.",
-        description: "A terrifying Stand known for brute force, confidence, and one of the most iconic time-based abilities in JoJo.",
-        userBio: "A ruthless and charismatic villain obsessed with power, control, and defeating the Joestar bloodline.",
-        mainImage: "https://static.jojowiki.com/images/thumb/8/89/latest/20210424182507/ASB_The_World_%28DIO%29.png/400px-ASB_The_World_%28DIO%29.png"
+        ability: "Time stop and immense strength.",
+        description: "A terrifying Stand.",
+        bio: "A ruthless villain.",
+        part: "Part 3",
+        image: "the-world.png"
       },
       {
-        id: "crazy-diamond",
         name: "Crazy Diamond",
         user: "Josuke Higashikata",
-        part: "Part 4 · Diamond Is Unbreakable",
         accent: "#ff5ba2",
-        ability: "Can restore broken objects and heal injuries by returning things to a previous state.",
-        description: "A fast and powerful Stand with one of the most useful support abilities in the series, blending offense with restoration.",
-        userBio: "A kind-hearted but fiercely proud student known for his loyalty, courage, and explosive temper when insulted.",
-        mainImage: "https://static.jojowiki.com/images/thumb/a/a5/latest/20191015215414/ASB_Crazy_Diamond_%28Josuke_Higashikata%29.png/400px-ASB_Crazy_Diamond_%28Josuke_Higashikata%29.png"
+        ability: "Restores objects and heals.",
+        description: "A powerful restoration Stand.",
+        bio: "Kind but fierce.",
+        part: "Part 4",
+        image: "crazy-diamond.png"
       }
     ];
 
-    let currentIndex = 0;
-    const favoriteSet = new Set();
+    let i = 0;
+    let favorites = new Set();
 
-    const mainImage = document.getElementById('mainImage');
-    const standName = document.getElementById('standName');
-    const userName = document.getElementById('userName');
-    const standCardTitle = document.getElementById('standCardTitle');
-    const userCardTitle = document.getElementById('userCardTitle');
-    const standAbility = document.getElementById('standAbility');
-    const standDescription = document.getElementById('standDescription');
-    const standPart = document.getElementById('standPart');
-    const userBio = document.getElementById('userBio');
-    const counter = document.getElementById('counter');
-    const favoriteBtn = document.getElementById('favoriteBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const glow = document.getElementById('glow');
+    function update() {
+      let s = stands[i];
 
-    function updateViewer() {
-      const stand = stands[currentIndex];
-      document.documentElement.style.setProperty('--accent', stand.accent);
-      document.documentElement.style.setProperty('--accent-soft', hexToRgba(stand.accent, 0.16));
-      mainImage.src = stand.mainImage;
-      mainImage.alt = `${stand.user} with ${stand.name}`;
-      standName.textContent = stand.name;
-      userName.textContent = stand.user;
-      standCardTitle.textContent = stand.name;
-      userCardTitle.textContent = stand.user;
-      standAbility.textContent = stand.ability;
-      standDescription.textContent = stand.description;
-      standPart.textContent = stand.part;
-      userBio.textContent = stand.userBio;
-      counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(stands.length).padStart(2, '0')}`;
-      favoriteBtn.classList.toggle('active', favoriteSet.has(stand.id));
-      glow.style.background = hexToRgba(stand.accent, 0.18);
+      document.documentElement.style.setProperty("--accent", s.accent);
+
+      document.getElementById("image").src = s.image;
+      document.getElementById("standName").textContent = s.name;
+      document.getElementById("userName").textContent = s.user;
+      document.getElementById("ability").textContent = s.ability;
+      document.getElementById("description").textContent = s.description;
+      document.getElementById("bio").textContent = s.bio;
+      document.getElementById("part").textContent = s.part;
+
+      document.getElementById("counter").textContent =
+        (i + 1).toString().padStart(2, "0") + " / " + stands.length.toString().padStart(2, "0");
     }
 
-    function nextStand() {
-      currentIndex = (currentIndex + 1) % stands.length;
-      updateViewer();
+    function next() {
+      i = (i + 1) % stands.length;
+      update();
     }
 
-    function prevStand() {
-      currentIndex = (currentIndex - 1 + stands.length) % stands.length;
-      updateViewer();
+    function prev() {
+      i = (i - 1 + stands.length) % stands.length;
+      update();
     }
 
-    function toggleFavorite() {
-      const stand = stands[currentIndex];
-      if (favoriteSet.has(stand.id)) favoriteSet.delete(stand.id);
-      else favoriteSet.add(stand.id);
-      updateViewer();
+    function favorite() {
+      let id = stands[i].name;
+      if (favorites.has(id)) {
+        favorites.delete(id);
+      } else {
+        favorites.add(id);
+      }
     }
 
-    function hexToRgba(hex, alpha) {
-      const clean = hex.replace('#', '');
-      const bigint = parseInt(clean, 16);
-      const r = (bigint >> 16) & 255;
-      const g = (bigint >> 8) & 255;
-      const b = bigint & 255;
-      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-    }
-
-    prevBtn.addEventListener('click', prevStand);
-    nextBtn.addEventListener('click', nextStand);
-    favoriteBtn.addEventListener('click', toggleFavorite);
-
-    updateViewer();
+    update();
   </script>
+
 </body>
 </html>
