@@ -51,7 +51,6 @@ h1 {
   animation: float 3s infinite ease-in-out;
 }
 
-/* ✅ FIXED BIGGER DIO */
 .hero img.big {
   max-height: 560px;
 }
@@ -94,6 +93,7 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .card {
@@ -101,9 +101,15 @@ h1 {
   padding: 20px;
   border-radius: 15px;
   width: 300px;
+  text-align: left;
+  line-height: 1.6;
 }
 
-/* Animations */
+.card h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
 @keyframes float {
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -123,7 +129,7 @@ h1 {
 <div class="hero">
   <div class="arrow left" onclick="prev()">‹</div>
   <div class="aura" id="aura"></div>
-  <img id="image">
+  <img id="image" alt="Stand image">
   <div class="arrow right" onclick="next()">›</div>
 </div>
 
@@ -135,14 +141,14 @@ h1 {
 <div class="details">
   <div class="card">
     <h3>Stand</h3>
-    <p id="ability"></p>
+    <p><strong>Ability:</strong> <span id="ability"></span></p>
     <p id="description"></p>
   </div>
 
   <div class="card">
     <h3>User</h3>
     <p id="bio"></p>
-    <p id="part"></p>
+    <p><strong>Part:</strong> <span id="part"></span></p>
   </div>
 </div>
 
@@ -153,9 +159,9 @@ const stands = [
     user: "Jotaro Kujo",
     accent: "#9a78ea",
     glow: "rgba(154,120,234,0.4)",
-    ability: "Super speed, strength, time stop",
-    description: "Extremely powerful close-range Stand",
-    bio: "Calm, intelligent, intimidating",
+    ability: "Super speed, precision, immense strength, and time stop.",
+    description: "Star Platinum is one of the most powerful close-range Stands, known for its incredible speed, strength, and precision. It can move faster than the eye can track and deliver devastating punches with pinpoint accuracy. One of its defining traits is its extremely sharp eyesight, allowing it to see tiny details from long distances. As the series progresses, Star Platinum gains the ability to stop time for a few seconds, making it even more dangerous in combat. Its durability and reflexes make it nearly unbeatable in close quarters. Overall, it represents raw power combined with perfect control.",
+    bio: "Jotaro Kujo is a calm, intelligent, and highly disciplined high school student who often appears cold and detached. Despite his tough exterior, he deeply cares about his family and friends and is willing to risk everything to protect them. He is extremely observant and strategic, often outsmarting enemies rather than relying solely on brute force. Jotaro has a strong sense of justice and rarely shows fear, even in life-threatening situations. His personality contrasts with his immense power, making him both intimidating and reliable. He plays a central role in Part 3: Stardust Crusaders as the main protagonist.",
     part: "Part 3",
     image: "star-platinum.png"
   },
@@ -164,20 +170,20 @@ const stands = [
     user: "DIO",
     accent: "#d2a316",
     glow: "rgba(210,163,22,0.5)",
-    ability: "Time stop",
-    description: "One of the strongest Stands",
-    bio: "Charismatic and ruthless villain",
+    ability: "Time stop, immense strength, and incredible speed.",
+    description: "The World is a close-range Stand that rivals Star Platinum in strength, speed, and precision. Its most iconic ability is the power to stop time, allowing DIO to move freely while everything else remains frozen. During stopped time, The World can attack opponents without them being able to react, making it extremely lethal. It also possesses immense physical power, capable of destroying enemies with ease. Its speed allows it to keep up with even the fastest Stands in battle. Combined with DIO’s intelligence and ruthlessness, The World becomes one of the most dangerous Stands in the series.",
+    bio: "DIO is a charismatic and ruthless antagonist driven by his desire for absolute power and dominance. Originally born as Dio Brando, he uses cunning, manipulation, and ambition to rise above others at any cost. After becoming a vampire, he gains enhanced strength, regeneration, and immortality, further amplifying his threat. DIO is highly intelligent and strategic, often planning several steps ahead of his enemies. He views others as tools or obstacles, showing little to no empathy. As the main villain of Part 3: Stardust Crusaders, he stands as one of the most iconic and feared characters in the series.",
     part: "Part 3",
     image: "the-world-new.png"
   },
   {
     name: "Crazy Diamond",
-    user: "Josuke",
+    user: "Josuke Higashikata",
     accent: "#ff5ba2",
     glow: "rgba(255,91,162,0.4)",
-    ability: "Restoration",
-    description: "Can heal and repair anything",
-    bio: "Kind but short-tempered",
+    ability: "Restoration, healing, and powerful close-range attacks.",
+    description: "Crazy Diamond is a close-range Stand with incredible strength and speed, comparable to Star Platinum. Its unique ability allows it to restore objects or living beings back to a previous state, effectively healing injuries or repairing damage. This restoration power can also be used creatively in combat, such as reshaping objects or trapping enemies. However, it cannot heal Josuke himself, which is its main limitation. The Stand’s precision and speed make it highly effective both offensively and defensively. It represents both power and compassion through its restorative abilities.",
+    bio: "Josuke Higashikata is a kind-hearted and friendly high school student known for his strong sense of empathy. He deeply values his friends and community and often uses his Stand to help others. Despite his calm nature, he has a short temper when someone insults his hairstyle. Josuke is brave and willing to stand up against dangerous enemies to protect those around him. He balances humor and seriousness, making him a relatable and likable protagonist. He is the main character of Part 4: Diamond is Unbreakable.",
     part: "Part 4",
     image: "crazy-diamond.png"
   }
@@ -195,7 +201,6 @@ function update() {
   let img = document.getElementById("image");
   img.src = s.image;
 
-  // ✅ BIGGER ONLY FOR DIO
   if (s.name === "The World") {
     img.classList.add("big");
   } else {
@@ -238,5 +243,4 @@ update();
 
 </body>
 </html>
-
 
